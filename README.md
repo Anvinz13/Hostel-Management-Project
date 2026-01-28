@@ -41,7 +41,7 @@ The system is mainly designed for **administrators** to manage students, rooms, 
 | Layer        | Technology |
 |--------------|------------|
 | Frontend     | HTML, CSS, JavaScript |
-| Backend      | C# (.NET Framework) |
+| Backend      | ASP.NET Core  |
 | Database     | SQL Server / MySQL |
 | IDE          | Visual Studio |
 | Version Control | Git, GitHub |
