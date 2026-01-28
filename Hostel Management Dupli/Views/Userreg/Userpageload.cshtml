@@ -1,0 +1,71 @@
+﻿@model Hostel_Management_Dupli.Models.Usercls;
+<form asp-action="userclick" class="form-horizondal" method="post">
+    <div class="form-group">
+        <label class="control-label"> Name</label>
+        <input asp-for="Name" class="form-control" id="d1" />
+    </div>
+    <div class="form-group">
+        <label class="control-label"> Gender</label>
+        <input asp-for="Gender" class="form-control" id="d2" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label"> Age</label>
+        <input asp-for="Age" class="form-control" id="d3" />
+    </div>
+    
+
+    <div class="form-group">
+        <label class="control-label">Phone</label>
+        <input asp-for="Phone" class="form-control" id="d4" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Email</label>
+        <input asp-for="Email" class="form-control" id="d5" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label"> Address</label>
+        <input asp-for="Address" class="form-control" id="d6" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label"> Join Date</label>
+        <input asp-for="JoinDate" class="form-control" id="d7" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Username</label>
+        <input asp-for="Username" class="form-control" id="d8" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Password</label>
+        <input asp-for="Password" class="form-control" id="d9" />
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="REGISTER" class="btn btn-success" />
+    </div>
+
+</form>
+
+@{
+    if (TempData["msg"] != null)
+    {
+        <script>
+            alert('@TempData["msg"]');
+            document.getElementById('d1').value="";
+                 document.getElementById('d2').value="";
+                  document.getElementById('d3').value="";
+                       document.getElementById('d4').value="";
+                       document.getElementById('d5').value="";
+                        document.getElementById('d6').value="";
+                         document.getElementById('d7').value="";
+                          document.getElementById('d8').value="";
+                           document.getElementById('d9').value="";
+
+        </script>
+    }
+}

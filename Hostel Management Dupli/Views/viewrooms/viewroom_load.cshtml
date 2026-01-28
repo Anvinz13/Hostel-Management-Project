@@ -1,0 +1,91 @@
+﻿@model List<Hostel_Management_Dupli.Models.Addroommodel>
+
+<style>
+    h2 {
+        text-align: center;
+        font-weight: 700;
+        margin: 25px 0;
+        color: #2c3e50;
+    }
+
+    .table-wrapper {
+        max-width: 85%;
+        margin: 0 auto;
+    }
+
+    table.table {
+        width: 100%;
+        background: #ffffff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        border-collapse: collapse;
+    }
+
+        table.table thead th {
+            background: #2c3e50;
+            color: #ffffff;
+            text-align: center;
+            font-weight: 600;
+            font-size: 15px;
+            padding: 14px;
+        }
+
+        table.table tbody td {
+            padding: 12px;
+            text-align: center;
+            font-size: 15px;
+            color: #34495e;
+            vertical-align: middle;
+        }
+
+        table.table tbody tr:nth-child(even) {
+            background: #f5f6f7;
+        }
+
+    .btn-primary {
+        padding: 6px 12px;
+        font-size: 13px;
+        font-weight: 600;
+        border-radius: 6px;
+    }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+</style>
+
+<h2>Available Rooms</h2>
+
+<div class="table-wrapper">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Rent</th>
+                <th>Room Type</th>
+                <th>Occupied</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var room in Model)
+            {
+                <tr>
+                    <td>@room.Rent</td>
+                    <td>@room.Roomtype</td>
+                    <td>@room.Occupied</td>
+                    <td>
+                        <a asp-controller="Request"
+                           asp-action="RequestRoom"
+                           asp-route-type="@room.Roomtype"
+                           asp-route-rent="@room.Rent"
+                           class="btn btn-primary">
+                            Request Room
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

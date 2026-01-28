@@ -1,0 +1,99 @@
+﻿@model List<Hostel_Management_Dupli.Models.Requstcls>
+
+<style>
+    h2 {
+        text-align: center;
+        font-weight: 700;
+        margin: 25px 0;
+        color: #2c3e50;
+    }
+
+    .table-container {
+        max-width: 90%;
+        margin: 0 auto;
+    }
+
+    table.table {
+        width: 100%;
+        background: #ffffff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+        table.table thead th {
+            background: #2c3e50;
+            color: #ffffff;
+            text-align: center;
+            font-weight: 600;
+            padding: 14px;
+            font-size: 15px;
+        }
+
+        table.table tbody td {
+            padding: 12px;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 14px;
+            color: #34495e;
+        }
+
+        table.table tbody tr:nth-child(even) {
+            background: #f7f7f7;
+        }
+
+    .btn-success, .btn-danger {
+        padding: 6px 12px;
+        font-size: 13px;
+        border-radius: 6px;
+        font-weight: 600;
+    }
+
+    .btn-success {
+        background: #28a745;
+        border: none;
+    }
+
+    .btn-danger {
+        background: #dc3545;
+        border: none;
+    }
+
+        .btn-success:hover, .btn-danger:hover {
+            opacity: 0.9;
+        }
+</style>
+
+<h2>Pending Room Requests</h2>
+
+<div class="table-container">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Request ID</th>
+                <th>User ID</th>
+                <th>Room Type</th>
+                <th>Rent</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var req in Model)
+            {
+                <tr>
+                    <td>@req.RequestId</td>
+                    <td>@req.User_id</td>
+                    <td>@req.RoomType</td>
+                    <td>@req.Rent</td>
+                    <td>@req.Status</td>
+                    <td>
+                        <a asp-action="Approve" asp-route-id="@req.RequestId" class="btn btn-success">Approve</a>
+                        <a asp-action="Reject" asp-route-id="@req.RequestId" class="btn btn-danger">Reject</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,12 @@
+﻿@model Hostel_Management_Dupli.Models.Addroommodel;
+@{
+    ViewBag.Title = "Admin Home";
+}
+
+<h2>Welcome Admin</h2>
+
+<div class="admin-buttons" style="margin-top:20px;">
+    <a href="@Url.Action("AddRoom", "Adminhome")" class="btn btn-primary" style="margin:10px;">Add Room Details</a>
+    <a href="@Url.Action("UpdateRoom", "Adminhome")" class="btn btn-warning" style="margin:10px;">Update Room Details</a>
+    <a href="@Url.Action("PendingRequests", "Adminhome")" class="btn btn-danger" style="margin:10px;">View Pending Requests</a>
+</div>

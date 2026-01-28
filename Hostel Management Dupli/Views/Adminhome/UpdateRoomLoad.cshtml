@@ -1,0 +1,33 @@
+﻿@model List<Hostel_Management_Dupli.Models.Addroommodel>
+
+<h2>Update Room Occupied</h2>
+
+@if (TempData["msg"] != null)
+{
+    <div class="alert alert-success">@TempData["msg"]</div>
+}
+
+<table class="table table-bordered">
+    <tr>
+        <th>Room Type</th>
+        <th>Rent</th>
+        <th>Occupied</th>
+        <th>Update</th>
+    </tr>
+
+    @foreach (var room in Model)
+    {
+        <tr>
+            <td>@room.Roomtype</td>
+            <td>@room.Rent</td>
+            <td>@room.Occupied</td>
+            <td>
+                <form asp-action="UpdateRoomOccupied" method="post">
+                    <input type="hidden" name="roomType" value="@room.Roomtype" />
+                    <input type="number" name="occupied" class="form-control" value="@room.Occupied" min="0" />
+                    <button type="submit" class="btn btn-warning btn-sm mt-1">Update</button>
+                </form>
+            </td>
+        </tr>
+    }
+</table>
