@@ -1,99 +1,80 @@
 ﻿@model List<Hostel_Management_Dupli.Models.Requstcls>
+@{
+    ViewData["Title"] = "Pending Requests";
+}
 
-<style>
-    h2 {
-        text-align: center;
-        font-weight: 700;
-        margin: 25px 0;
-        color: #2c3e50;
-    }
-
-    .table-container {
-        max-width: 90%;
-        margin: 0 auto;
-    }
-
-    table.table {
-        width: 100%;
-        background: #ffffff;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    }
-
-        table.table thead th {
-            background: #2c3e50;
-            color: #ffffff;
-            text-align: center;
-            font-weight: 600;
-            padding: 14px;
-            font-size: 15px;
-        }
-
-        table.table tbody td {
-            padding: 12px;
-            text-align: center;
-            vertical-align: middle;
-            font-size: 14px;
-            color: #34495e;
-        }
-
-        table.table tbody tr:nth-child(even) {
-            background: #f7f7f7;
-        }
-
-    .btn-success, .btn-danger {
-        padding: 6px 12px;
-        font-size: 13px;
-        border-radius: 6px;
-        font-weight: 600;
-    }
-
-    .btn-success {
-        background: #28a745;
-        border: none;
-    }
-
-    .btn-danger {
-        background: #dc3545;
-        border: none;
-    }
-
-        .btn-success:hover, .btn-danger:hover {
-            opacity: 0.9;
-        }
-</style>
-
-<h2>Pending Room Requests</h2>
+<div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <div>
+        <h2 class="fw-bold"><i class="bi bi-inbox text-primary me-2"></i>Pending Room Requests</h2>
+        <p class="text-muted">Review student room booking applications and approve or reject them.</p>
+    </div>
+    <div>
+        <a asp-controller="Adminhome" asp-action="Adminhomeload" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Dashboard
+        </a>
+    </div>
+</div>
 
 <div class="table-container">
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Request ID</th>
-                <th>User ID</th>
-                <th>Room Type</th>
-                <th>Rent</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            @foreach (var req in Model)
-            {
+    @if (Model == null || !Model.Any())
+    {
+        <div class="empty-state">
+            <div class="empty-state-icon text-success">
+                <i class="bi bi-check2-circle"></i>
+            </div>
+            <h4>All Caught Up!</h4>
+            <p class="text-muted">There are no pending room booking requests at the moment.</p>
+            <a asp-controller="Adminhome" asp-action="Adminhomeload" class="btn btn-outline-primary">
+                Return to Dashboard
+            </a>
+        </div>
+    }
+    else
+    {
+        <table class="table table-hover align-middle">
+            <thead>
                 <tr>
-                    <td>@req.RequestId</td>
-                    <td>@req.User_id</td>
-                    <td>@req.RoomType</td>
-                    <td>@req.Rent</td>
-                    <td>@req.Status</td>
-                    <td>
-                        <a asp-action="Approve" asp-route-id="@req.RequestId" class="btn btn-success">Approve</a>
-                        <a asp-action="Reject" asp-route-id="@req.RequestId" class="btn btn-danger">Reject</a>
-                    </td>
+                    <th>Req #</th>
+                    <th>Student ID</th>
+                    <th>Requested Room</th>
+                    <th>Monthly Rent</th>
+                    <th>Status</th>
+                    <th style="width: 200px;">Actions</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var req in Model)
+                {
+                    <tr>
+                        <td><span class="badge bg-light text-dark border">#@req.RequestId</span></td>
+                        <td>
+                            <span class="fw-semibold"><i class="bi bi-person me-1 text-secondary"></i> Student #@req.User_id</span>
+                        </td>
+                        <td>
+                            <span class="fw-bold text-dark">@req.RoomType</span>
+                        </td>
+                        <td>
+                            <span class="text-primary fw-bold">₹@req.Rent</span>
+                            <span class="text-muted small">/mo</span>
+                        </td>
+                        <td>
+                            <span class="badge-status badge-pending">
+                                <i class="bi bi-hourglass-split"></i> @req.Status
+                            </span>
+                        </td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <a asp-action="Approve" asp-route-id="@req.RequestId" class="btn btn-sm btn-success">
+                                    <i class="bi bi-check-lg"></i> Approve
+                                </a>
+                                <a asp-action="Reject" asp-route-id="@req.RequestId" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to reject this room request?');">
+                                    <i class="bi bi-x-lg"></i> Reject
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 </div>

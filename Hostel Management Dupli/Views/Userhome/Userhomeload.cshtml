@@ -1,25 +1,108 @@
 ﻿@{
-    ViewBag.Title = "User Home";
+    ViewData["Title"] = "Student Portal";
 }
 
-<div class="container" style="margin-top:50px;">
-    <div class="jumbotron text-center" style="padding:30px; background-color:beige; border-radius:15px; box-shadow:0 0 10px #ccc;">
-        <h1>Welcome to <span style="color:orange">Sunshine Hostel</span></h1>
-        <p style="font-size:18px;">Location: VSNL Road,Kakkanad</p>
-        <hr style="margin:20px 0;">
-        <p style="font-size:16px;">Contact Details:</p>
-        <p>Phone: +91-9876543210</p>
-        <p>Email: info@sunshinehostel.com</p>
+<div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <div>
+        <h2 class="fw-bold">
+            <span>Welcome, </span>
+            <span class="text-primary">@ViewBag.Username</span>! 👋
+        </h2>
+        <p class="text-muted">Welcome to your student dashboard at Sunshine Hostel, Kakkanad.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-controller="viewrooms" asp-action="viewroom_load" class="btn btn-primary">
+            <i class="bi bi-door-open me-1"></i> Browse Rooms
+        </a>
+        <a asp-controller="Request" asp-action="MyRequests" class="btn btn-outline-primary">
+            <i class="bi bi-card-checklist me-1"></i> My Requests
+        </a>
+    </div>
+</div>
 
-        <div style="margin-top:20px;">
-            <a href="@Url.Action("viewroom_load", "viewrooms")"
-               class="btn btn-primary"
-               style="padding:10px 20px; font-size:16px;">
-                View Room Details
-            </a>
-            <div class="text-center" style="margin-top: 20px;">
-                <a href="@Url.Action("MyRequests", "Request")" class="btn btn-info btn-lg">
-                    Request Status
+<!-- Quick Stats -->
+<div class="row g-3 mb-4">
+    <div class="col-sm-6">
+        <div class="stat-card">
+            <div class="stat-icon primary">
+                <i class="bi bi-grid"></i>
+            </div>
+            <div>
+                <div class="stat-title">Available Room Types</div>
+                <div class="stat-value">@(ViewBag.AvailableRoomsCount ?? 0)</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="stat-card">
+            <div class="stat-icon info">
+                <i class="bi bi-card-checklist"></i>
+            </div>
+            <div>
+                <div class="stat-title">My Room Requests</div>
+                <div class="stat-value">@(ViewBag.ActiveRequestsCount ?? 0)</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hostel Info Banner -->
+<div class="app-card border-0 mb-4" style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);">
+    <div class="row align-items-center">
+        <div class="col-md-8">
+            <h4 class="fw-bold text-primary mb-2">Sunshine Hostel - Kakkanad</h4>
+            <p class="text-secondary mb-3">
+                Located on VSNL Road close to IT hubs, bus stations, and colleges. Enjoy hygienic food, 
+                high-speed internet, clean rooms, and 24/7 power backup.
+            </p>
+            <div class="d-flex flex-wrap gap-3 small text-secondary">
+                <span><i class="bi bi-geo-alt-fill text-danger me-1"></i> VSNL Road, Kakkanad</span>
+                <span><i class="bi bi-telephone-fill text-success me-1"></i> +91-9876543210</span>
+                <span><i class="bi bi-envelope-fill text-primary me-1"></i> info@sunshinehostel.com</span>
+            </div>
+        </div>
+        <div class="col-md-4 text-center mt-3 mt-md-0">
+            <div class="d-inline-flex flex-column gap-2 w-100" style="max-width: 220px;">
+                <a asp-controller="viewrooms" asp-action="viewroom_load" class="btn btn-primary">
+                    <i class="bi bi-search me-1"></i> Find a Room
+                </a>
+                <a asp-controller="Request" asp-action="MyRequests" class="btn btn-outline-primary">
+                    <i class="bi bi-clock-history me-1"></i> Check Status
                 </a>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Amenities -->
+<h5 class="fw-bold mb-3"><i class="bi bi-stars text-warning me-2"></i>Included Facilities & Amenities</h5>
+<div class="row g-3">
+    <div class="col-sm-6 col-lg-3">
+        <div class="p-3 bg-white border rounded-3 h-100">
+            <div class="text-primary fs-3 mb-2"><i class="bi bi-wifi"></i></div>
+            <h6 class="fw-bold mb-1">High-Speed WiFi</h6>
+            <p class="text-muted small mb-0">Unlimited high speed fiber WiFi in all rooms.</p>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="p-3 bg-white border rounded-3 h-100">
+            <div class="text-success fs-3 mb-2"><i class="bi bi-egg-fried"></i></div>
+            <h6 class="fw-bold mb-1">Mess & Dining</h6>
+            <p class="text-muted small mb-0">Nutritious Kerala & North Indian meals daily.</p>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="p-3 bg-white border rounded-3 h-100">
+            <div class="text-danger fs-3 mb-2"><i class="bi bi-shield-lock"></i></div>
+            <h6 class="fw-bold mb-1">CCTV & Security</h6>
+            <p class="text-muted small mb-0">24/7 security warden with continuous CCTV monitoring.</p>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="p-3 bg-white border rounded-3 h-100">
+            <div class="text-warning fs-3 mb-2"><i class="bi bi-droplet-half"></i></div>
+            <h6 class="fw-bold mb-1">Purified Water</h6>
+            <p class="text-muted small mb-0">RO purified drinking water and 24/7 water supply.</p>
+        </div>
+    </div>
 </div>

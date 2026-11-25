@@ -1,0 +1,86 @@
+@model List<Hostel_Management_Dupli.Models.Usercls>
+@{
+    ViewData["Title"] = "Registered Students";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <div>
+        <h2 class="fw-bold"><i class="bi bi-people text-primary me-2"></i>Registered Students Directory</h2>
+        <p class="text-muted">Total registered students: <strong>@(Model?.Count ?? 0)</strong></p>
+    </div>
+    <div>
+        <a asp-action="Adminhomeload" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Dashboard
+        </a>
+    </div>
+</div>
+
+<div class="table-container">
+    @if (Model == null || !Model.Any())
+    {
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <i class="bi bi-person-x"></i>
+            </div>
+            <h4>No Registered Students Found</h4>
+            <p class="text-muted">Students who register via the portal will appear in this directory.</p>
+        </div>
+    }
+    else
+    {
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Full Name</th>
+                    <th>Allocated Room</th>
+                    <th>Gender & Age</th>
+                    <th>Contact Information</th>
+                    <th>Address</th>
+                    <th>Joined Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var student in Model)
+                {
+                    <tr>
+                        <td><span class="badge bg-light text-dark border">#@student.Student_id</span></td>
+                        <td>
+                            <div class="fw-bold text-dark">@student.Name</div>
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(student.AllocatedRoom))
+                            {
+                                <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle px-2 py-1">
+                                    <i class="bi bi-door-open-fill me-1"></i> @student.AllocatedRoom
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-light text-muted border">
+                                    Not Allocated
+                                </span>
+                            }
+                        </td>
+                        <td>
+                            <span class="badge bg-info-subtle text-info-emphasis me-1">@student.Gender</span>
+                            <span class="text-muted small">(@student.Age yrs)</span>
+                        </td>
+                        <td>
+                            <div><i class="bi bi-telephone text-primary me-1"></i> @student.Phone</div>
+                            <div class="text-muted small"><i class="bi bi-envelope text-primary me-1"></i> @student.Email</div>
+                        </td>
+                        <td>
+                            <span class="text-secondary small">@(string.IsNullOrWhiteSpace(student.Address) ? "N/A" : student.Address)</span>
+                        </td>
+                        <td>
+                            <span class="text-muted small">
+                                @(student.JoinDate != DateTime.MinValue ? student.JoinDate.ToString("MMM dd, yyyy") : "N/A")
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

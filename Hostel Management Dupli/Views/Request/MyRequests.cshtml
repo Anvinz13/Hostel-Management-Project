@@ -1,70 +1,80 @@
 ﻿@model List<Hostel_Management_Dupli.Models.Requstcls>
+@{
+    ViewData["Title"] = "My Room Requests";
+}
 
-<style>
-    h2 {
-        text-align: center;
-        font-weight: 700;
-        margin: 25px 0;
-        color: #2c3e50;
+<div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <div>
+        <h2 class="fw-bold"><i class="bi bi-card-checklist text-primary me-2"></i>My Room Requests</h2>
+        <p class="text-muted">Track the status of your room booking applications at Sunshine Hostel.</p>
+    </div>
+    <div>
+        <a asp-controller="viewrooms" asp-action="viewroom_load" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i> Request Another Room
+        </a>
+    </div>
+</div>
+
+<div class="table-container">
+    @if (Model == null || !Model.Any())
+    {
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <i class="bi bi-inbox"></i>
+            </div>
+            <h4>No Room Requests Found</h4>
+            <p class="text-muted">You haven't requested any room yet. Browse available rooms to submit an application.</p>
+            <a asp-controller="viewrooms" asp-action="viewroom_load" class="btn btn-primary">
+                Browse Available Rooms
+            </a>
+        </div>
     }
-
-    .table-wrapper {
-        max-width: 80%;
-        margin: 0 auto;
-    }
-
-    table.table {
-        background: #ffffff;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.12);
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-        table.table thead th {
-            background: #2c3e50;
-            color: #ffffff;
-            text-align: center;
-            font-weight: 600;
-            padding: 14px;
-            font-size: 15px;
-        }
-
-        table.table tbody td {
-            padding: 12px;
-            text-align: center;
-            vertical-align: middle;
-            font-size: 15px;
-            color: #34495e;
-        }
-
-        table.table tbody tr:nth-child(even) {
-            background: #f5f6f7;
-        }
-</style>
-
-<h2>My Room Requests</h2>
-
-<div class="table-wrapper">
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Room Type</th>
-                <th>Rent</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            @foreach (var req in Model)
-            {
+    else
+    {
+        <table class="table table-hover align-middle">
+            <thead>
                 <tr>
-                    <td>@req.RoomType</td>
-                    <td>@req.Rent</td>
-                    <td>@req.Status</td>
+                    <th>Request ID</th>
+                    <th>Room Type</th>
+                    <th>Rent</th>
+                    <th>Application Status</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var req in Model)
+                {
+                    <tr>
+                        <td><span class="badge bg-light text-dark border">#@req.RequestId</span></td>
+                        <td>
+                            <span class="fw-bold text-dark">@req.RoomType</span>
+                        </td>
+                        <td>
+                            <span class="text-primary fw-semibold">₹@req.Rent</span>
+                            <span class="text-muted small">/mo</span>
+                        </td>
+                        <td>
+                            @if (string.Equals(req.Status, "Approved", StringComparison.OrdinalIgnoreCase))
+                            {
+                                <span class="badge-status badge-approved">
+                                    <i class="bi bi-check-circle-fill"></i> Approved
+                                </span>
+                            }
+                            else if (string.Equals(req.Status, "Rejected", StringComparison.OrdinalIgnoreCase))
+                            {
+                                <span class="badge-status badge-rejected">
+                                    <i class="bi bi-x-circle-fill"></i> Rejected
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge-status badge-pending">
+                                    <i class="bi bi-hourglass-split"></i> Pending Admin Review
+                                </span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 </div>

@@ -1,0 +1,227 @@
+@model List<Hostel_Management_Dupli.Models.RoomAllocationModel>
+@{
+    ViewData["Title"] = "Room Allocations & Occupants";
+    var rooms = ViewBag.Rooms as List<Hostel_Management_Dupli.Models.Addroommodel> ?? new List<Hostel_Management_Dupli.Models.Addroommodel>();
+}
+
+<div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <div>
+        <h2 class="fw-bold"><i class="bi bi-person-badge text-primary me-2"></i>Room Allocations & Occupants</h2>
+        <p class="text-muted">Track exactly which room is occupied by which student, view contact details, and manage vacancies.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="Adminhomeload" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Dashboard
+        </a>
+        <a asp-action="UpdateRoom" class="btn btn-outline-primary">
+            <i class="bi bi-sliders me-1"></i> Manage Rooms
+        </a>
+    </div>
+</div>
+
+<!-- Overview Stats -->
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-lg-4">
+        <div class="stat-card">
+            <div class="stat-icon success">
+                <i class="bi bi-person-check-fill"></i>
+            </div>
+            <div>
+                <div class="stat-title">Total Active Residents</div>
+                <div class="stat-value">@(Model?.Count ?? 0)</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-4">
+        <div class="stat-card">
+            <div class="stat-icon primary">
+                <i class="bi bi-door-open-fill"></i>
+            </div>
+            <div>
+                <div class="stat-title">Configured Room Categories</div>
+                <div class="stat-value">@rooms.Count</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-4">
+        <div class="stat-card">
+            <div class="stat-icon info">
+                <i class="bi bi-building"></i>
+            </div>
+            <div>
+                <div class="stat-title">Total Occupied Beds</div>
+                <div class="stat-value">
+                    @rooms.Sum(r => int.TryParse(r.Occupied, out int occ) ? occ : 0)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Room-by-Room Occupancy Breakdown -->
+<div class="mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-bold mb-0"><i class="bi bi-grid-3x3-gap text-primary me-2"></i>Occupants by Room Category</h4>
+        <input type="text" id="residentSearch" class="form-control form-control-sm" placeholder="Search resident or room..." style="max-width: 250px;" onkeyup="filterAllocations()" />
+    </div>
+
+    @if (rooms.Any())
+    {
+        <div class="row g-4" id="allocationsContainer">
+            @foreach (var room in rooms)
+            {
+                var occupants = Model?.Where(m => string.Equals(m.RoomType, room.Roomtype, StringComparison.OrdinalIgnoreCase)).ToList() 
+                                ?? new List<Hostel_Management_Dupli.Models.RoomAllocationModel>();
+
+                <div class="col-12 room-allocation-card" data-room="@(room.Roomtype?.ToLower() ?? "")">
+                    <div class="app-card mb-0 shadow-sm border">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pb-3 mb-3 border-bottom">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="stat-icon primary" style="width: 42px; height: 42px; font-size: 1.25rem;">
+                                    <i class="bi bi-house-door"></i>
+                                </span>
+                                <div>
+                                    <h5 class="fw-bold mb-0">@room.Roomtype</h5>
+                                    <span class="text-primary fw-semibold small">₹@room.Rent</span>
+                                    <span class="text-muted small">/ month per resident</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge @(occupants.Count > 0 ? "bg-success" : "bg-secondary") px-3 py-2">
+                                    <i class="bi bi-people-fill me-1"></i> @occupants.Count Resident@(occupants.Count == 1 ? "" : "s") Assigned
+                                </span>
+                                <span class="badge bg-light text-secondary border px-3 py-2">
+                                    Occupancy: @room.Occupied Beds
+                                </span>
+                            </div>
+                        </div>
+
+                        @if (occupants.Any())
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Resident Student</th>
+                                            <th>Student ID</th>
+                                            <th>Phone Number</th>
+                                            <th>Email Address</th>
+                                            <th>Joined / Allocated Date</th>
+                                            <th>Status</th>
+                                            <th style="width: 140px;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var occ in occupants)
+                                        {
+                                            <tr class="occupant-row" data-name="@occ.StudentName.ToLower()" data-phone="@occ.StudentPhone">
+                                                <td>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <div class="user-badge p-1 px-2">
+                                                            <i class="bi bi-person text-primary"></i>
+                                                        </div>
+                                                        <div>
+                                                            <strong class="text-dark">@occ.StudentName</strong>
+                                                            <div class="text-muted small">@occ.StudentGender, @occ.StudentAge yrs</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td><span class="badge bg-light text-dark border">#@occ.UserId</span></td>
+                                                <td>
+                                                    <a href="tel:@occ.StudentPhone" class="text-decoration-none">
+                                                        <i class="bi bi-telephone text-success me-1"></i> @occ.StudentPhone
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <span class="text-secondary small">
+                                                        <i class="bi bi-envelope text-primary me-1"></i> @occ.StudentEmail
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="text-muted small">
+                                                        @(occ.JoinDate != DateTime.MinValue ? occ.JoinDate.ToString("MMM dd, yyyy") : "N/A")
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="badge-status badge-approved">
+                                                        <i class="bi bi-check-circle-fill"></i> Occupying
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <a asp-action="Deallocate" 
+                                                       asp-route-id="@occ.RequestId" 
+                                                       asp-route-roomType="@occ.RoomType" 
+                                                       class="btn btn-sm btn-outline-danger"
+                                                       onclick="return confirm('Are you sure you want to deallocate @occ.StudentName from @occ.RoomType? This will release the bed.');">
+                                                        <i class="bi bi-box-arrow-right me-1"></i> Vacate
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-center py-4 bg-light rounded-3 border border-dashed">
+                                <i class="bi bi-door-closed text-muted fs-3 mb-1 d-block"></i>
+                                <span class="text-muted small">No students currently allocated to this room category.</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="table-container">
+            <div class="empty-state">
+                <div class="empty-state-icon">
+                    <i class="bi bi-door-closed"></i>
+                </div>
+                <h4>No Rooms Configured</h4>
+                <p class="text-muted">Create room categories first to start assigning students.</p>
+                <a asp-controller="Addroom" asp-action="roompageload" class="btn btn-primary">
+                    Add Room Details
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        function filterAllocations() {
+            var input = document.getElementById("residentSearch").value.toLowerCase();
+            var cards = document.getElementsByClassName("room-allocation-card");
+
+            for (var i = 0; i < cards.length; i++) {
+                var card = cards[i];
+                var roomText = card.getAttribute("data-room");
+                var rows = card.getElementsByClassName("occupant-row");
+                var cardMatch = roomText.indexOf(input) > -1;
+                var rowMatch = false;
+
+                for (var j = 0; j < rows.length; j++) {
+                    var row = rows[j];
+                    var nameText = row.getAttribute("data-name");
+                    var phoneText = row.getAttribute("data-phone");
+                    if (nameText.indexOf(input) > -1 || phoneText.indexOf(input) > -1 || cardMatch) {
+                        row.style.display = "";
+                        rowMatch = true;
+                    } else {
+                        row.style.display = "none";
+                    }
+                }
+
+                if (cardMatch || rowMatch || input === "") {
+                    card.style.display = "";
+                } else {
+                    card.style.display = "none";
+                }
+            }
+        }
+    </script>
+}

@@ -5,12 +5,18 @@ namespace Hostel_Management_Dupli.Controllers
 {
     public class AdminregController : Controller
     {
-       
-            Dbcls dbobj = new Dbcls();
+        private readonly Dbcls _db;
+
+        public AdminregController(Dbcls db)
+        {
+            _db = db;
+        }
+
         public IActionResult Admin_pageload()
         {
             return View();
         }
+
         [HttpPost]
         public IActionResult adminclick(Admincls obcls)
         {
@@ -18,8 +24,16 @@ namespace Hostel_Management_Dupli.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    string resp = dbobj.AdminInsert(obcls);
-                    TempData["msg"] = resp;
+                    string resp = _db.AdminInsert(obcls);
+                    if (resp.Contains("success", StringComparison.OrdinalIgnoreCase))
+                    {
+                        TempData["success_msg"] = "Administrator account created successfully! Please sign in.";
+                        return RedirectToAction("loginpageload", "Login");
+                    }
+                    else
+                    {
+                        TempData["msg"] = resp;
+                    }
                 }
             }
             catch (Exception ex)

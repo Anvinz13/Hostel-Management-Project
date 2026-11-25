@@ -1,8 +1,144 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Welcome";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="py-4">
+    <!-- Hero Section -->
+    <div class="app-card border-0 text-white p-5 mb-4" style="background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <span class="badge bg-white text-primary px-3 py-2 rounded-pill fw-semibold mb-3">
+                    Modern Living Spaces in Kakkanad
+                </span>
+                <h1 class="display-5 fw-bold mb-3">Welcome to Sunshine Hostel</h1>
+                <p class="lead opacity-90 mb-4">
+                    Experience secure, comfortable, and connected student & professional living with streamlined online room booking and management.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a asp-controller="viewrooms" asp-action="viewroom_load" class="btn btn-light text-primary btn-lg px-4 shadow-sm">
+                        <i class="bi bi-door-open me-2"></i> Browse Available Rooms
+                    </a>
+                    <a asp-controller="Userreg" asp-action="Userpageload" class="btn btn-outline-light btn-lg px-4">
+                        <i class="bi bi-person-plus me-2"></i> Register as Student
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center d-none d-lg-block">
+                <div class="p-4 bg-white bg-opacity-10 rounded-4 backdrop-blur border border-white border-opacity-25">
+                    <div style="font-size: 5rem;">🏨</div>
+                    <h4 class="text-white mt-2 mb-1">Sunshine Living</h4>
+                    <p class="text-white-50 small mb-0">VSNL Road, Kakkanad, Kochi</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="stat-card h-100">
+                <div class="stat-icon primary">
+                    <i class="bi bi-wifi"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold mb-1">High-Speed WiFi</h5>
+                    <p class="text-muted small mb-0">Continuous gigabit internet coverage across all rooms and study lounges.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card h-100">
+                <div class="stat-icon success">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold mb-1">24/7 Security</h5>
+                    <p class="text-muted small mb-0">Round-the-clock CCTV surveillance, biometric access, and on-site warden.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card h-100">
+                <div class="stat-icon warning">
+                    <i class="bi bi-lightning-charge"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold mb-1">Full Power Backup</h5>
+                    <p class="text-muted small mb-0">Uninterrupted generator power for fans, lighting, and study spaces.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Info & Contact -->
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="app-card h-100">
+                <h4 class="fw-bold mb-3"><i class="bi bi-info-circle text-primary me-2"></i>About Sunshine Hostel</h4>
+                <p class="text-secondary">
+                    Sunshine Hostel is situated conveniently near major colleges and the Infopark IT hub in Kakkanad. 
+                    We provide fully furnished accommodation with flexible sharing options (Single, Double, Triple, and 4-Sharing) 
+                    designed to meet the needs of students and working professionals.
+                </p>
+                <div class="row g-3 pt-2">
+                    <div class="col-sm-6">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-check2-circle text-success fs-5"></i>
+                            <span>Nutritious dining & clean mess facility</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-check2-circle text-success fs-5"></i>
+                            <span>Daily housekeeping and laundry area</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-check2-circle text-success fs-5"></i>
+                            <span>RO purified drinking water</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-check2-circle text-success fs-5"></i>
+                            <span>Dedicated silent study space</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="app-card h-100">
+                <h5 class="fw-bold mb-3"><i class="bi bi-telephone text-primary me-2"></i>Contact & Location</h5>
+                <ul class="list-unstyled d-flex flex-column gap-3 mb-4">
+                    <li class="d-flex align-items-start gap-3">
+                        <i class="bi bi-geo-alt-fill text-danger fs-5 mt-1"></i>
+                        <div>
+                            <strong>Location</strong>
+                            <div class="text-muted small">VSNL Road, Near Infopark, Kakkanad, Kochi, Kerala</div>
+                        </div>
+                    </li>
+                    <li class="d-flex align-items-start gap-3">
+                        <i class="bi bi-telephone-fill text-success fs-5 mt-1"></i>
+                        <div>
+                            <strong>Phone</strong>
+                            <div class="text-muted small">+91-9876543210 / 0484-2420000</div>
+                        </div>
+                    </li>
+                    <li class="d-flex align-items-start gap-3">
+                        <i class="bi bi-envelope-fill text-primary fs-5 mt-1"></i>
+                        <div>
+                            <strong>Email</strong>
+                            <div class="text-muted small">info@sunshinehostel.com</div>
+                        </div>
+                    </li>
+                </ul>
+                <a asp-controller="Login" asp-action="loginpageload" class="btn btn-outline-primary w-100">
+                    <i class="bi bi-box-arrow-in-right me-1"></i> Sign In to Portal
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
