@@ -1,33 +1,87 @@
 ﻿@model List<Hostel_Management_Dupli.Models.Addroommodel>
-
-<h2>Update Room Occupied</h2>
-
-@if (TempData["msg"] != null)
-{
-    <div class="alert alert-success">@TempData["msg"]</div>
+@{
+    ViewData["Title"] = "Manage Rooms";
 }
 
-<table class="table table-bordered">
-    <tr>
-        <th>Room Type</th>
-        <th>Rent</th>
-        <th>Occupied</th>
-        <th>Update</th>
-    </tr>
+<div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <div>
+        <h2 class="fw-bold"><i class="bi bi-door-open text-primary me-2"></i>Room Management & Occupancy</h2>
+        <p class="text-muted">Review current room categories, rents, and update occupied bed counts.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="Adminhomeload" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Dashboard
+        </a>
+        <a asp-controller="Addroom" asp-action="roompageload" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i> Add Room
+        </a>
+    </div>
+</div>
 
-    @foreach (var room in Model)
+<div class="table-container">
+    @if (Model == null || !Model.Any())
     {
-        <tr>
-            <td>@room.Roomtype</td>
-            <td>@room.Rent</td>
-            <td>@room.Occupied</td>
-            <td>
-                <form asp-action="UpdateRoomOccupied" method="post">
-                    <input type="hidden" name="roomType" value="@room.Roomtype" />
-                    <input type="number" name="occupied" class="form-control" value="@room.Occupied" min="0" />
-                    <button type="submit" class="btn btn-warning btn-sm mt-1">Update</button>
-                </form>
-            </td>
-        </tr>
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <i class="bi bi-door-closed"></i>
+            </div>
+            <h4>No Rooms Configured Yet</h4>
+            <p class="text-muted">Get started by creating your first hostel room type.</p>
+            <a asp-controller="Addroom" asp-action="roompageload" class="btn btn-primary">
+                Add Room Details
+            </a>
+        </div>
     }
-</table>
+    else
+    {
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Room Type / Sharing</th>
+                    <th>Monthly Rent</th>
+                    <th>Current Occupied</th>
+                    <th>View Occupants</th>
+                    <th style="width: 250px;">Update Occupancy</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var room in Model)
+                {
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-light text-dark border p-2">
+                                    <i class="bi bi-house-door text-primary"></i>
+                                </span>
+                                <span class="fw-semibold">@room.Roomtype</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="text-primary fw-bold">₹@room.Rent</span>
+                            <span class="text-muted small">/ month</span>
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary px-3 py-2">
+                                <i class="bi bi-person-fill me-1"></i> @room.Occupied Beds Occupied
+                            </span>
+                        </td>
+                        <td>
+                            <a asp-action="Allocations" class="btn btn-sm btn-outline-info text-dark">
+                                <i class="bi bi-people me-1"></i> Who is in this room?
+                            </a>
+                        </td>
+                        <td>
+                            <form asp-action="UpdateRoomOccupied" method="post" class="d-flex align-items-center gap-2">
+                                <input type="hidden" name="roomType" value="@room.Roomtype" />
+                                <input type="number" name="occupied" class="form-control form-control-sm" value="@room.Occupied" min="0" max="100" style="width: 85px;" required />
+                                <button type="submit" class="btn btn-sm btn-warning text-dark">
+                                    <i class="bi bi-check2"></i> Save
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

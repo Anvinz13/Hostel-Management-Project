@@ -5,22 +5,31 @@ namespace Hostel_Management_Dupli.Controllers
 {
     public class AddroomController : Controller
     {
-        Dbcls obj = new Dbcls();
+        private readonly Dbcls _db;
+
+        public AddroomController(Dbcls db)
+        {
+            _db = db;
+        }
+
         public IActionResult roompageload()
         {
             return View();
         }
 
         [HttpPost]
-
         public IActionResult AddRoomClick(Addroommodel cls)
         {
             if (ModelState.IsValid)
             {
-                string msg = obj.AddRoomInsert(cls); // Call Dbcls method
-                TempData["msg"] = msg;             // Show message in view
+                string msg = _db.AddRoomInsert(cls);
+                TempData["msg"] = msg;
+                if (msg.Contains("success", StringComparison.OrdinalIgnoreCase))
+                {
+                    return RedirectToAction("UpdateRoom", "Adminhome");
+                }
             }
-            return View("roompageload");            // Return same page
+            return View("roompageload", cls);
         }
     }
 }

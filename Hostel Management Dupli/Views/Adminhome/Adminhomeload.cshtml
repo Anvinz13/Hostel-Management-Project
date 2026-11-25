@@ -1,12 +1,126 @@
-﻿@model Hostel_Management_Dupli.Models.Addroommodel;
-@{
-    ViewBag.Title = "Admin Home";
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
 }
 
-<h2>Welcome Admin</h2>
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h2 class="fw-bold"><i class="bi bi-speedometer2 text-primary me-2"></i>Administrator Dashboard</h2>
+        <p class="text-muted">Manage rooms, review pending student applications, and monitor occupancy.</p>
+    </div>
+    <div>
+        <a asp-controller="Addroom" asp-action="roompageload" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i> Add New Room
+        </a>
+    </div>
+</div>
 
-<div class="admin-buttons" style="margin-top:20px;">
-    <a href="@Url.Action("AddRoom", "Adminhome")" class="btn btn-primary" style="margin:10px;">Add Room Details</a>
-    <a href="@Url.Action("UpdateRoom", "Adminhome")" class="btn btn-warning" style="margin:10px;">Update Room Details</a>
-    <a href="@Url.Action("PendingRequests", "Adminhome")" class="btn btn-danger" style="margin:10px;">View Pending Requests</a>
+<!-- Quick Statistics -->
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-lg-3">
+        <a asp-action="Allocations" class="text-decoration-none">
+            <div class="stat-card">
+                <div class="stat-icon info">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+                <div>
+                    <div class="stat-title">Active Room Occupants</div>
+                    <div class="stat-value">@(ViewBag.AllocationsCount ?? 0)</div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <a asp-action="UpdateRoom" class="text-decoration-none">
+            <div class="stat-card">
+                <div class="stat-icon primary">
+                    <i class="bi bi-door-closed"></i>
+                </div>
+                <div>
+                    <div class="stat-title">Configured Room Types</div>
+                    <div class="stat-value">@(ViewBag.RoomsCount ?? 0)</div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <a asp-action="PendingRequests" class="text-decoration-none">
+            <div class="stat-card">
+                <div class="stat-icon warning">
+                    <i class="bi bi-hourglass-split"></i>
+                </div>
+                <div>
+                    <div class="stat-title">Pending Room Requests</div>
+                    <div class="stat-value">@(ViewBag.PendingRequestsCount ?? 0)</div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <a asp-action="RegisteredUsers" class="text-decoration-none">
+            <div class="stat-card">
+                <div class="stat-icon success">
+                    <i class="bi bi-people"></i>
+                </div>
+                <div>
+                    <div class="stat-title">Registered Students</div>
+                    <div class="stat-value">@(ViewBag.UsersCount ?? 0)</div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Admin Quick Action Cards -->
+<div class="row g-4">
+    <div class="col-md-6 col-lg-3">
+        <div class="app-card app-card-hover h-100 text-center border-primary">
+            <div class="stat-icon info mx-auto mb-3" style="width: 56px; height: 56px;">
+                <i class="bi bi-person-lines-fill fs-3 text-primary"></i>
+            </div>
+            <h5 class="fw-bold mb-2">Room Allocations</h5>
+            <p class="text-muted small mb-3">See exactly which room is filled by whom, contact details, and vacate beds.</p>
+            <a asp-action="Allocations" class="btn btn-primary w-100">
+                View Occupants
+            </a>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+        <div class="app-card app-card-hover h-100 text-center">
+            <div class="stat-icon primary mx-auto mb-3" style="width: 56px; height: 56px;">
+                <i class="bi bi-plus-circle fs-3"></i>
+            </div>
+            <h5 class="fw-bold mb-2">Add Room</h5>
+            <p class="text-muted small mb-3">Configure new room categories, monthly rents, and initial occupancy.</p>
+            <a asp-action="AddRoom" class="btn btn-outline-primary w-100">
+                Add Room Details
+            </a>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+        <div class="app-card app-card-hover h-100 text-center">
+            <div class="stat-icon warning mx-auto mb-3" style="width: 56px; height: 56px;">
+                <i class="bi bi-sliders fs-3"></i>
+            </div>
+            <h5 class="fw-bold mb-2">Manage Rooms</h5>
+            <p class="text-muted small mb-3">View existing room types and update live occupancy headcounts.</p>
+            <a asp-action="UpdateRoom" class="btn btn-outline-warning text-dark w-100">
+                Update Occupancy
+            </a>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+        <div class="app-card app-card-hover h-100 text-center">
+            <div class="stat-icon success mx-auto mb-3" style="width: 56px; height: 56px;">
+                <i class="bi bi-inbox fs-3"></i>
+            </div>
+            <h5 class="fw-bold mb-2">Room Requests</h5>
+            <p class="text-muted small mb-3">Review, approve, or reject student accommodation applications.</p>
+            <a asp-action="PendingRequests" class="btn btn-outline-success w-100">
+                Review Requests
+            </a>
+        </div>
+    </div>
 </div>

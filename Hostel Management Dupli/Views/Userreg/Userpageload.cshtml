@@ -1,71 +1,84 @@
-﻿@model Hostel_Management_Dupli.Models.Usercls;
-<form asp-action="userclick" class="form-horizondal" method="post">
-    <div class="form-group">
-        <label class="control-label"> Name</label>
-        <input asp-for="Name" class="form-control" id="d1" />
-    </div>
-    <div class="form-group">
-        <label class="control-label"> Gender</label>
-        <input asp-for="Gender" class="form-control" id="d2" />
-    </div>
-
-    <div class="form-group">
-        <label class="control-label"> Age</label>
-        <input asp-for="Age" class="form-control" id="d3" />
-    </div>
-    
-
-    <div class="form-group">
-        <label class="control-label">Phone</label>
-        <input asp-for="Phone" class="form-control" id="d4" />
-    </div>
-
-    <div class="form-group">
-        <label class="control-label">Email</label>
-        <input asp-for="Email" class="form-control" id="d5" />
-    </div>
-
-    <div class="form-group">
-        <label class="control-label"> Address</label>
-        <input asp-for="Address" class="form-control" id="d6" />
-    </div>
-
-    <div class="form-group">
-        <label class="control-label"> Join Date</label>
-        <input asp-for="JoinDate" class="form-control" id="d7" />
-    </div>
-
-    <div class="form-group">
-        <label class="control-label">Username</label>
-        <input asp-for="Username" class="form-control" id="d8" />
-    </div>
-
-    <div class="form-group">
-        <label class="control-label">Password</label>
-        <input asp-for="Password" class="form-control" id="d9" />
-    </div>
-
-    <div class="form-group">
-        <input type="submit" value="REGISTER" class="btn btn-success" />
-    </div>
-
-</form>
-
+﻿@model Hostel_Management_Dupli.Models.Usercls
 @{
-    if (TempData["msg"] != null)
-    {
-        <script>
-            alert('@TempData["msg"]');
-            document.getElementById('d1').value="";
-                 document.getElementById('d2').value="";
-                  document.getElementById('d3').value="";
-                       document.getElementById('d4').value="";
-                       document.getElementById('d5').value="";
-                        document.getElementById('d6').value="";
-                         document.getElementById('d7').value="";
-                          document.getElementById('d8').value="";
-                           document.getElementById('d9').value="";
-
-        </script>
-    }
+    ViewData["Title"] = "Student Registration";
 }
+
+<div class="row justify-content-center py-3">
+    <div class="col-md-9 col-lg-8">
+        <div class="app-card shadow-md">
+            <div class="text-center mb-4">
+                <div class="stat-icon primary mx-auto mb-2" style="width: 52px; height: 52px;">
+                    <i class="bi bi-mortarboard fs-3"></i>
+                </div>
+                <h3 class="fw-bold mb-1">Student Registration</h3>
+                <p class="text-muted small">Create your student account to apply for hostel rooms</p>
+            </div>
+
+            <form asp-action="userclick" method="post" novalidate>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="d1">Full Name</label>
+                        <input asp-for="Name" class="form-control" id="d1" placeholder="Enter student full name" required />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label" for="d2">Gender</label>
+                        <select asp-for="Gender" class="form-select" id="d2" required>
+                            <option value="">Select</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label" for="d3">Age</label>
+                        <input asp-for="Age" type="number" class="form-control" id="d3" min="15" max="99" placeholder="e.g. 21" required />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label" for="d4">Phone Number</label>
+                        <input asp-for="Phone" class="form-control" id="d4" placeholder="+91-9876543210" required />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label" for="d5">Email Address</label>
+                        <input asp-for="Email" type="email" class="form-control" id="d5" placeholder="student@example.com" required />
+                    </div>
+
+                    <div class="col-md-8">
+                        <label class="form-label" for="d6">Permanent Address</label>
+                        <input asp-for="Address" class="form-control" id="d6" placeholder="Door No, Street, City, State, PIN" required />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label" for="d7">Joining Date</label>
+                        <input asp-for="JoinDate" type="date" class="form-control" id="d7" required />
+                    </div>
+
+                    <div class="col-12"><hr class="my-2" /></div>
+
+                    <div class="col-md-6">
+                        <label class="form-label" for="d8">Portal Username</label>
+                        <input asp-for="Username" class="form-control" id="d8" placeholder="Choose a username" required />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label" for="d9">Password</label>
+                        <input asp-for="Password" type="password" class="form-control" id="d9" placeholder="Create a password" required />
+                    </div>
+
+                    <div class="col-12 mt-4">
+                        <button type="submit" class="btn btn-primary w-100 py-2">
+                            <i class="bi bi-person-check me-1"></i> Complete Registration
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="text-center small text-muted border-top pt-3 mt-4">
+                Already registered? <a asp-controller="Login" asp-action="loginpageload" class="fw-semibold text-primary text-decoration-none">Sign In here</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,46 +1,204 @@
-﻿<!DOCTYPE html>
+﻿@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var session = HttpContextAccessor.HttpContext?.Session;
+    var uid = session?.GetInt32("uid") ?? 0;
+    var username = session?.GetString("username");
+    var logtype = session?.GetString("logtype");
+    bool isLoggedIn = uid > 0 && !string.IsNullOrEmpty(logtype);
+    bool isAdmin = isLoggedIn && string.Equals(logtype, "Admin", StringComparison.OrdinalIgnoreCase);
+    bool isUser = isLoggedIn && string.Equals(logtype, "User", StringComparison.OrdinalIgnoreCase);
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Hostel_Management_Dupli</title>
+    <title>@ViewData["Title"] - Sunshine Hostel Management</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Hostel_Management_Dupli.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Hostel_Management_Dupli</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-expand-lg navbar-custom">
+            <div class="container">
+                <a class="navbar-brand" asp-controller="@(isAdmin ? "Adminhome" : (isUser ? "Userhome" : "Home"))" asp-action="@(isAdmin ? "Adminhomeload" : (isUser ? "Userhomeload" : "Index"))">
+                    <span>🏨</span>
+                    <span>Sunshine Hostel</span>
+                    <span class="brand-badge">.NET 10</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        @if (isAdmin)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Adminhome" asp-action="Adminhomeload">
+                                    <i class="bi bi-speedometer2 me-1"></i> Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Adminhome" asp-action="Allocations">
+                                    <i class="bi bi-person-badge me-1"></i> Room Allocations
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Addroom" asp-action="roompageload">
+                                    <i class="bi bi-plus-circle me-1"></i> Add Room
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Adminhome" asp-action="UpdateRoom">
+                                    <i class="bi bi-door-open me-1"></i> Manage Rooms
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Request" asp-action="PendingRequests">
+                                    <i class="bi bi-inbox me-1"></i> Pending Requests
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Adminhome" asp-action="RegisteredUsers">
+                                    <i class="bi bi-people me-1"></i> Students
+                                </a>
+                            </li>
+                        }
+                        else if (isUser)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Userhome" asp-action="Userhomeload">
+                                    <i class="bi bi-house me-1"></i> Home
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="viewrooms" asp-action="viewroom_load">
+                                    <i class="bi bi-grid me-1"></i> Browse Rooms
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Request" asp-action="MyRequests">
+                                    <i class="bi bi-card-checklist me-1"></i> My Requests
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Index">
+                                    <i class="bi bi-house me-1"></i> Home
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="viewrooms" asp-action="viewroom_load">
+                                    <i class="bi bi-grid me-1"></i> Browse Rooms
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Privacy">
+                                    <i class="bi bi-shield-check me-1"></i> About
+                                </a>
+                            </li>
+                        }
                     </ul>
+
+                    <div class="d-flex align-items-center gap-2">
+                        @if (isLoggedIn)
+                        {
+                            <div class="user-badge">
+                                <i class="bi bi-person-circle"></i>
+                                <span>@username</span>
+                                <span class="role-tag @(isAdmin ? "admin" : "user")">@logtype</span>
+                            </div>
+                            <a class="btn btn-sm btn-outline-danger" asp-controller="Login" asp-action="Logout" title="Sign out">
+                                <i class="bi bi-box-arrow-right"></i> Sign Out
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-sm btn-outline-primary" asp-controller="Login" asp-action="loginpageload">
+                                <i class="bi bi-box-arrow-in-right"></i> Sign In
+                            </a>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Register
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Userreg" asp-action="Userpageload">
+                                            <i class="bi bi-mortarboard me-2 text-primary"></i> Student Registration
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Adminreg" asp-action="Admin_pageload">
+                                            <i class="bi bi-shield-lock me-2 text-secondary"></i> Admin Registration
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+
+    <div class="container py-4">
+        <!-- Toast / Alert Notification Container -->
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-primary alert-dismissible fade show shadow-sm" role="alert">
+                <i class="bi bi-info-circle-fill me-2"></i>
+                @TempData["msg"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["success_msg"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                @TempData["success_msg"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["error_msg"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                @TempData["error_msg"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["info_msg"] != null)
+        {
+            <div class="alert alert-info alert-dismissible fade show shadow-sm" role="alert">
+                <i class="bi bi-info-circle-fill me-2"></i>
+                @TempData["info_msg"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <main role="main">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - Hostel_Management_Dupli - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="app-footer">
+        <div class="container d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+            <div>
+                &copy; @DateTime.Now.Year <strong>Sunshine Hostel</strong> - All Rights Reserved.
+            </div>
+            <div class="d-flex gap-3">
+                <span><i class="bi bi-geo-alt text-primary"></i> VSNL Road, Kakkanad</span>
+                <span><i class="bi bi-telephone text-primary"></i> +91-9876543210</span>
+                <span><i class="bi bi-envelope text-primary"></i> info@sunshinehostel.com</span>
+            </div>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

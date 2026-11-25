@@ -5,11 +5,18 @@ namespace Hostel_Management_Dupli.Controllers
 {
     public class UserregController : Controller
     {
-        Dbcls dbobj = new Dbcls();
+        private readonly Dbcls _db;
+
+        public UserregController(Dbcls db)
+        {
+            _db = db;
+        }
+
         public IActionResult Userpageload()
         {
             return View();
         }
+
         [HttpPost]
         public IActionResult userclick(Usercls obcls)
         {
@@ -17,8 +24,16 @@ namespace Hostel_Management_Dupli.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    string resp = dbobj.UserInsert(obcls);
-                    TempData["msg"] = resp;
+                    string resp = _db.UserInsert(obcls);
+                    if (resp.Contains("success", StringComparison.OrdinalIgnoreCase))
+                    {
+                        TempData["success_msg"] = "Student registration completed successfully! Please sign in with your credentials.";
+                        return RedirectToAction("loginpageload", "Login");
+                    }
+                    else
+                    {
+                        TempData["msg"] = resp;
+                    }
                 }
             }
             catch (Exception ex)
